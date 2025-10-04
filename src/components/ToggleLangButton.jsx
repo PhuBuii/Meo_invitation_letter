@@ -1,0 +1,28 @@
+"use client";
+import { motion } from "framer-motion";
+
+export default function ToggleLangButton({ lang, onToggle, label = "Toggle language" }) {
+  const onKey = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onToggle();
+    }
+  };
+  return (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      onClick={onToggle}
+      onKeyDown={onKey}
+      role="switch"
+      aria-checked={lang === "en"}
+      aria-label="Toggle language"
+      className="absolute bottom-4 right-4 z-30 select-none rounded-2xl bg-white/90 px-3 py-2 text-sm font-semibold shadow-lg ring-1 ring-black/5 backdrop-blur hover:bg-white active:scale-[.98] md:bottom-6 md:right-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+      title={label}
+      style={{ willChange: "transform" }}
+    >
+      {lang === "vi" ? "VI ↔ EN" : "EN ↔ VI"}
+    </motion.button>
+  );
+}

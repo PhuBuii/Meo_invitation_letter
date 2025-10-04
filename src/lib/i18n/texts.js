@@ -1,0 +1,88 @@
+export const TEXTS = {
+  vi: {
+    invitation_overline: "Giấy mời tốt nghiệp",
+    hero_name: "Vân Khánh",
+    hero_para:
+      "Thân mời bạn đến tham dự lễ tốt nghiệp của {name} – cùng nhau lưu giữ khoảnh khắc đáng nhớ và gửi lời chúc mừng. Hẹn bạn lúc {time} tại {venue}.",
+    chip_time: (d) =>
+      new Intl.DateTimeFormat("vi-VN", {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+        .format(d)
+        .replace(",", " · "),
+    chip_place: "Khách sạn Rex · Q1",
+    btn_save_calendar: "Lưu vào lịch (.ics)",
+    btn_call: (p) => `Gọi ${p}`,
+    memories_overline: "Make memory",
+    memories_title: "Khoảnh khắc đáng nhớ",
+    memories_subtitle: "Một vài tấm hình để mở đầu cho album tốt nghiệp.",
+    time_title: "Thời gian tham dự",
+    time_subtitle: "Đếm ngược tới khoảnh khắc tốt nghiệp!",
+    label_days: "Ngày",
+    label_hours: "Giờ",
+    label_minutes: "Phút",
+    label_seconds: "Giây",
+    map_overline: "Hướng dẫn di chuyển",
+    map_title: "Thông tin & đường đi",
+    map_subtitle: "Bạn có thể mở Google Maps ngay bên dưới để tới địa điểm.",
+    info_time: "Thời gian",
+    info_dresscode: "Trang phục",
+    info_contact: "Liên hệ",
+    dresscode_value: "Lịch sự / tốt nghiệp",
+    info_badge: "Hẹn gặp bạn tại buổi lễ!",
+    footer_line1: "Cảm ơn vì đã tham dự! 💙",
+    footer_line2:
+      "Sự hiện diện của bạn là món quà quý giá dành cho Vân Khánh trong ngày lễ tốt nghiệp. Hẹn gặp bạn tại buổi lễ!",
+    sticky_directions: "Chỉ đường",
+    sticky_call: (p) => `Gọi ${p}`,
+    lang_toggle_label: "VI",
+    skip_to_content: "Bỏ qua để tới nội dung chính",
+  },
+  en: {
+    invitation_overline: "Graduation Invitation",
+    hero_name: "Van Khanh",
+    hero_para:
+      "You’re warmly invited to {name}'s graduation — let’s celebrate and capture this special moment together. See you at {time} at {venue}.",
+    chip_time: (d) =>
+      new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+        .format(d)
+        .replace(",", " · "),
+    chip_place: "Rex Hotel · D1",
+    btn_save_calendar: "Save to calendar (.ics)",
+    btn_call: (p) => `Call ${p}`,
+    memories_overline: "Make memory",
+    memories_title: "Memorable moments",
+    memories_subtitle: "A few photos to open the graduation album.",
+    time_title: "Event time",
+    time_subtitle: "Countdown to the big moment!",
+    label_days: "Days",
+    label_hours: "Hours",
+    label_minutes: "Minutes",
+    label_seconds: "Seconds",
+    map_overline: "Directions",
+    map_title: "Info & route",
+    map_subtitle: "Open Google Maps below to navigate to the venue.",
+    info_time: "Time",
+    info_dresscode: "Dress code",
+    info_contact: "Contact",
+    dresscode_value: "Smart / graduation",
+    info_badge: "See you at the ceremony!",
+    footer_line1: "Thanks for joining! 💙",
+    footer_line2:
+      "Your presence is the most precious gift to Van Khanh on this special day. See you at the ceremony!",
+    sticky_directions: "Directions",
+    sticky_call: (p) => `Call ${p}`,
+    lang_toggle_label: "EN",
+    skip_to_content: "Skip to main content",
+  },
+};
