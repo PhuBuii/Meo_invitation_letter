@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 
-export default function SectionAccent({ from = "#A8D1FF22", to = "#FF7DAE22" }) {
+export default function SectionAccent({from="#A8D1FF33", to="#FF7DAE33" }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}

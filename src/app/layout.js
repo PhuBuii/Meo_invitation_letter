@@ -11,11 +11,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="min-h-screen w-full relative overflow-hidden">
-          {children}
-        </div>
+    <html lang="en" /* optional: className="light" */>
+      <head>
+        {/* Ngăn iOS auto-darken */}
+        <meta name="color-scheme" content="light" />
+        {/* Safari iOS vẫn tôn trọng nếu thêm cái này */}
+        <meta name="supported-color-schemes" content="light" />
+        <meta name="theme-color" content="#FFFFFF" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}>
+        <div className="min-h-screen w-full relative overflow-hidden">{children}</div>
       </body>
     </html>
   );
