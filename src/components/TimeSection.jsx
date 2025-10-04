@@ -24,12 +24,23 @@ const CountdownBox = React.memo(function CountdownBox({ label, value }) {
   );
 });
 
-function MiniCalendar({ eventDate, lang, fredokaClass = "" }) {
+
+function MiniCalendar({
+  eventDate,
+  lang,
+  fredokaClass = "",
+  poodleSrc = "/poodle.svg",  // <--- thêm: đường dẫn SVG chú poodle
+}) {
   const y = eventDate.getFullYear();
   const m = eventDate.getMonth();
   const cells = useMemo(() => monthMatrix(y, m), [y, m]);
-  const monthName = eventDate.toLocaleString(lang === "vi" ? "vi-VN" : "en-US", { month: "long" });
-  const wk = lang === "vi" ? ["T2", "T3", "T4", "T5", "T6", "T7", "CN"] : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const monthName = eventDate.toLocaleString(
+    lang === "vi" ? "vi-VN" : "en-US",
+    { month: "long" }
+  );
+  const wk = lang === "vi"
+    ? ["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
+    : ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
   return (
     <motion.div {...fadeUp(0.05)} className="rounded-2xl p-4 shadow bg-white">
@@ -45,27 +56,53 @@ function MiniCalendar({ eventDate, lang, fredokaClass = "" }) {
 
       <div className="grid grid-cols-7 gap-1 text-center text-[11px]">
         {wk.map((d) => (<div key={d} className="py-1 text-gray-600">{d}</div>))}
+
         {cells.map((c, idx) => {
           const isEvent = c.inMonth && c.d === eventDate.getDate();
+
+          if (!isEvent) {
+            /* Ô bình thường giữ nguyên */
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 6 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className={`relative rounded-md py-2 text-sm ${
+                  c.inMonth ? "text-gray-900" : "text-gray-300"
+                }`}
+              >
+                {c.d}
+              </motion.div>
+            );
+          }
+
+          /* Ô ngày sự kiện: chèn ảnh poodle ở giữa + số ngày nổi phía trên */
           return (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 6 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className={`relative rounded-md py-2 text-sm ${c.inMonth ? "text-gray-900" : "text-gray-300"}`}
-              style={isEvent ? { background: "#A8D1FF", color: "#0C2340", fontWeight: 700 } : {}}
-              aria-current={isEvent ? "date" : undefined}
+              className="relative rounded-md py-2 text-sm text-[#0C2340] bg-transparent"
+              aria-current="date"
             >
-              {c.d}
-              {isEvent && (
-                <span
-                  className="absolute inset-0 rounded-md ring-2"
-                  style={{ borderColor: "#FF7DAE", boxShadow: "0 0 0 2px #FF7DAE inset" }}
-                  aria-hidden
-                />
-              )}
+              {/* Icon poodle trang trí: absolute, căn giữa, không nhận sự kiện chuột */}
+              <img
+                src={poodleSrc}
+                alt=""
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 m-auto size-14 rotate-12"
+                /* Nếu SVG đậm quá, có thể thêm opacity:
+                   style={{ opacity: 0.85 }} */
+              />
+
+              {/* Số ngày: nằm trên icon, có nền tròn nhạt để dễ đọc */}
+              <span className="relative z-[1] inline-flex items-center justify-center h-6 w-6 rounded-full  text-[#0C2340] font-semibold shadow-sm">
+                {c.d}
+              </span>
             </motion.div>
           );
         })}
@@ -73,6 +110,7 @@ function MiniCalendar({ eventDate, lang, fredokaClass = "" }) {
     </motion.div>
   );
 }
+
 
 export default function TimeSection({ lang, fredokaClass = "" }) {
   const t = TEXTS[lang];

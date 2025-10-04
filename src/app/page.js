@@ -1,13 +1,12 @@
 // app/page.jsx
 "use client";
 import { Inter, Fredoka } from "next/font/google";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import useLang from "@/hooks/useLang";
-import { TEXTS } from "@/lib/i18n/texts";
 import NetworkAwareLoader from "@/components/NetworkAwareLoader";
+import Letter from "@/components/Letter";
 
-// Lazy load các section nặng
 const Hero = dynamic(() => import("@/components/Hero"), { ssr: true });
 const MemoriesGrid = dynamic(() => import("@/components/MemoriesGrid"), {
   ssr: true,
@@ -27,32 +26,42 @@ export default function Page() {
   const { lang, toggle } = useLang();
   const skipId = "main-content";
 
-  // Ví dụ: nếu bạn có state isPending thì truyền vào active
-  const isPending = true; // <-- thay bằng logic thật (transition, fetch…)
+  // A) State điều khiển overlay + trạng thái mở
+  const [introDone, setIntroDone] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
+
+  // B) Tránh hydration mismatch
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
+  const isPending = false; // logic thật của bạn
+
+  if (!hydrated) return <main className={`${inter.className} min-h-screen`} />;
 
   return (
     <main className={`${inter.className} relative min-h-screen`}>
-      <a
-        href={`#${skipId}`}
-        className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 bg-white text-gray-900 px-3 py-2 rounded shadow"
-      >
-        {TEXTS[lang].skip_to_content}
-      </a>
+      {/* Chỉ render overlay khi chưa xong intro */}
+      {!introDone && (
+        <Letter
+          isOpened={isOpened}               // <-- TRUYỀN XUỐNG
+          setIsOpened={setIsOpened}         // <-- TRUYỀN XUỐNG
+          onDone={() => setIntroDone(true)} // gọi khi animation hoàn tất
+          oncePerSession={true}             // muốn test lại thì xóa key sessionStorage
+          doneAfterMs={2500}
+        />
+      )}
 
-      {/* Bật overlay khi mạng yếu hoặc pending quá threshold */}
-      <NetworkAwareLoader
-        active={isPending}
-        thresholdMs={650}
-        forceAfterDelay={false}    
-        message="Đang tải trang…"
-      >
-        <Hero lang={lang} onToggleLang={toggle} interClass={inter.className} fredokaClass={fredoka.className}/>
-        <div id={skipId} />
-        <MemoriesGrid lang={lang} fredokaClass={fredoka.className}/>
-        <TimeSection lang={lang} fredokaClass={fredoka.className} interClass={inter.className}/>
-        <InfoAndMaps lang={lang} fredokaClass={fredoka.className}/>
-        <FooterThanks lang={lang} fredokaClass={fredoka.className}/>
-      </NetworkAwareLoader>
+      {/* App chính hiển thị sau khi introDone */}
+      {introDone && (
+        <NetworkAwareLoader active={isPending} thresholdMs={650} forceAfterDelay={false} message="Đang tải trang…">
+          <Hero lang={lang} onToggleLang={toggle} interClass={inter.className} fredokaClass={fredoka.className}/>
+          <div id={skipId} />
+          <MemoriesGrid lang={lang} fredokaClass={fredoka.className}/>
+          <TimeSection lang={lang} fredokaClass={fredoka.className} interClass={inter.className}/>
+          <InfoAndMaps lang={lang} fredokaClass={fredoka.className}/>
+          <FooterThanks lang={lang} fredokaClass={fredoka.className}/>
+        </NetworkAwareLoader>
+      )}
     </main>
   );
 }
