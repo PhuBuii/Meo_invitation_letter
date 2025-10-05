@@ -12,14 +12,21 @@ export default function InfoAndMaps({ lang, fredokaClass = "" }) {
   const timeLine =
     lang === "vi"
       ? "17:15 – 19:00, 14/10"
-      : `${new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }).format(
-          EVENT.start
-        )} – ${new Intl.DateTimeFormat("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }).format(
-          EVENT.end
-        )}, Oct 14`;
+      : `${new Intl.DateTimeFormat("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(EVENT.start)} – ${new Intl.DateTimeFormat("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(EVENT.end)}, Oct 14`;
 
   return (
-    <section id='map' className="relative container mx-auto px-4 py-12 md:py-16 max-w-6xl">
+    <section
+      id="map"
+      className="relative container mx-auto px-4 py-12 md:py-16 max-w-6xl"
+    >
       <SectionAccent from="#A8D1FF18" to="#FF7DAE18" />
       <SectionTitle
         overline={t.map_overline}
@@ -30,8 +37,14 @@ export default function InfoAndMaps({ lang, fredokaClass = "" }) {
       />
 
       <div className="grid md:grid-cols-5 gap-6 items-start">
-        <motion.div {...fadeUp(0.05)} className="md:col-span-2 rounded-2xl p-5 ">
-          <h4 className={`${fredokaClass} text-xl font-semibold`} style={{ color: COLORS.navy }}>
+        <motion.div
+          {...fadeUp(0.05)}
+          className="md:col-span-2 rounded-2xl p-5 "
+        >
+          <h4
+            className={`${fredokaClass} text-xl font-semibold`}
+            style={{ color: COLORS.pastelBlue }}
+          >
             {EVENT.venue}
           </h4>
           <p className="mt-1 text-sm text-gray-700">{EVENT.address}</p>
@@ -40,10 +53,12 @@ export default function InfoAndMaps({ lang, fredokaClass = "" }) {
               <span className="font-medium">{t.info_time}:</span> {timeLine}
             </li>
             <li>
-              <span className="font-medium">{t.info_dresscode}:</span> {t.dresscode_value}
+              <span className="font-medium">{t.info_dresscode}:</span>{" "}
+              {t.dresscode_value}
             </li>
             <li>
-              <span className="font-medium">{t.info_contact}:</span> {EVENT.hotline}
+              <span className="font-medium">{t.info_contact}:</span>{" "}
+              {EVENT.hotline}
             </li>
           </ul>
           <div

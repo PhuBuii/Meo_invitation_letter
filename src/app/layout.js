@@ -2,7 +2,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -11,16 +14,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" /* optional: className="light" */>
-      <head>
-        {/* Ngăn iOS auto-darken */}
-        <meta name="color-scheme" content="light" />
-        {/* Safari iOS vẫn tôn trọng nếu thêm cái này */}
-        <meta name="supported-color-schemes" content="light" />
-        <meta name="theme-color" content="#FFFFFF" />
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}>
-        <div className="min-h-screen w-full relative overflow-hidden">{children}</div>
+    <html lang="en">
+      <head />
+      <body
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
+      >
+        <div className="min-h-screen w-full relative overflow-hidden">
+          {children}
+        </div>
       </body>
     </html>
   );

@@ -30,7 +30,10 @@ export default function MemoriesGrid({ lang, fredokaClass = "" }) {
         custom={0.05}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
-        <motion.div variants={staggerItem} className="md:col-span-2 overflow-hidden rounded-2xl group">
+        <motion.div
+          variants={staggerItem}
+          className="md:col-span-2 overflow-hidden rounded-2xl group"
+        >
           <Image
             src="/anh_1.jpg"
             alt="Khoảnh khắc đáng nhớ 1"
@@ -39,9 +42,12 @@ export default function MemoriesGrid({ lang, fredokaClass = "" }) {
             className="h-64 md:h-[420px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         </motion.div>
-        <motion.div variants={staggerItem} className="overflow-hidden rounded-2xl group">
+        <motion.div
+          variants={staggerItem}
+          className="overflow-hidden rounded-2xl group"
+        >
           <Image
-            src="/anh_2.jpg"
+            src="/anh_4.jpg"
             alt="Khoảnh khắc đáng nhớ 2"
             width={800}
             height={800}
@@ -49,7 +55,10 @@ export default function MemoriesGrid({ lang, fredokaClass = "" }) {
             className="h-64 md:h-[420px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         </motion.div>
-        <motion.div variants={staggerItem} className="overflow-hidden rounded-2xl group">
+        <motion.div
+          variants={staggerItem}
+          className="overflow-hidden rounded-2xl group"
+        >
           <Image
             src="/anh_3.jpg"
             alt="Khoảnh khắc đáng nhớ 3"

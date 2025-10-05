@@ -31,14 +31,16 @@ export default function SectionTitle({
       <div className="flex items-center justify-center flex-col">
         {overline && (
           <p
-            className="uppercase font-medium tracking-widest text-sm"
+            className="uppercase font-medium tracking-widest "
             style={{ color: COLORS.softPink }}
           >
             {overline}
           </p>
         )}
         <h2
-          className={`${fredokaClass} text-3xl md:text-4xl font-semibold`}
+          className={`${fredokaClass} text-3xl md:text-4xl font-semibold ${
+            special ? "" : "text-outline-pink"
+          }`}
           style={{ color: special ? COLORS.softPink : COLORS.navy }}
         >
           {title}
