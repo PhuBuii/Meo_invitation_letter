@@ -1,15 +1,29 @@
+/* ================= Tailwind ================= */
 @import "tailwindcss";
 
+/* ================= Design tokens ================= */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Envelope palette */
+  --inside-color: #b5b3b0; /* thân trong */
+  --top-color: #d8ccb6; /* nắp trên */
+  --left-color: #f3eee4; /* cạnh trái */
+  --right-color: #f3eee4; /* cạnh phải */
+  --paper-border: #cfc6b6; /* viền mảnh (tuỳ chọn) */
+  --paper-shadow: rgba(0, 0, 0, 0.18);
 }
 
+/* Tailwind v4 tokens (tuỳ chọn) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+@theme {
+  --breakpoint-xs: 400px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,67 +32,56 @@
     --foreground: #ededed;
   }
 }
-@theme {
-  --breakpoint-xs: 400px;
+
+/* ================= Base reset ================= */
+html,
+body {
+  min-height: 100%;
+  background: #ffffff; /* tránh nền trong suốt bị webview tự xử lý */
 }
+:root {
+  color-scheme: light;
+} /* giữ light nếu bạn muốn cố định */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
 body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-html,
-body {
-  min-height: 100%;
-}
+
+/* Background nhẹ phía sau toàn trang */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1; /* nằm sau toàn bộ content */
+  z-index: -1;
   pointer-events: none;
-  /* ví dụ: radial sky blue */
   background: radial-gradient(
     circle at top right,
     rgba(70, 130, 180, 0.5),
     transparent 70%
   );
 }
-html:focus-within {
-  scroll-behavior: smooth;
-}
-:root {
-  color-scheme: light; /* khẳng định chỉ light */
-}
-html,
-body {
-  background: #ffffff; /* tránh nền trong suốt bị webview tự xử lý */
-}
 
-:root {
-  /* Màu giấy bên trong phong bì (thân) */
-  --inside-color: #b5b3b0; /* warm cream */
-
-  /* Màu nắp trên - đậm hơn thân một chút để tạo chiều sâu */
-  --top-color: #d8ccb6; /* deeper beige flap */
-
-  /* Hai cạnh trái/phải – gần inside nhưng lệch tông nhẹ để thấy nếp gấp */
-  --left-color: #f3eee4; /* light cream (trái) */
-  --right-color: #f3eee4; /* slightly darker (phải) */
-
-  /* Tuỳ chọn: viền/đổ bóng tinh tế */
-  --paper-border: #cfc6b6; /* viền mảnh quanh giấy nếu cần */
-  --paper-shadow: rgba(0, 0, 0, 0.18);
-}
-
+/* ================= Envelope ================= */
+/* Container phong bì: cố định kích thước để không đổi layout */
 .wap {
+  position: relative;
   height: 200px;
   width: 300px;
   background-color: var(--inside-color);
-  position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
   z-index: 0;
+  perspective: 1000px;
+  will-change: transform;
   animation: shake 0.8s infinite;
 }
+
+/* Lắc nhẹ khi idle */
 @keyframes shake {
   0%,
   100% {
@@ -98,12 +101,19 @@ body {
   }
 }
 
+/* Tôn trọng reduce motion: tắt lắc */
+@media (prefers-reduced-motion: reduce) {
+  .wap {
+    animation: none;
+  }
+}
+
+/* Nắp thư (2 lớp) */
 .lid {
   position: absolute;
+  inset: 0;
   height: 100%;
   width: 100%;
-  top: 0;
-  left: 0;
   border-right: 150px solid transparent;
   border-bottom: 100px solid transparent;
   border-left: 150px solid transparent;
@@ -111,7 +121,7 @@ body {
   transition: transform 0.25s linear;
 }
 
-/* Lid when closed */
+/* trạng thái đóng */
 .lid.one {
   border-top: 100px solid var(--top-color);
   transform: rotateX(0deg);
@@ -119,7 +129,7 @@ body {
   transition-delay: 0.75s;
 }
 
-/* Lid when opened */
+/* nắp trong */
 .lid.two {
   border-top: 100px solid var(--inside-color);
   transform: rotateX(90deg);
@@ -127,12 +137,10 @@ body {
   transition-delay: 0.5s;
 }
 
+/* Thân phong bì (2 cạnh + đáy) */
 .envelope {
   position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
+  inset: 0;
   border-top: 100px solid transparent;
   border-right: 150px solid var(--right-color);
   border-bottom: 100px solid var(--right-color);
@@ -141,44 +149,74 @@ body {
   box-shadow: 6px 10px 24px var(--paper-shadow);
 }
 
+/* ================= Letter (lá thư) ================= */
+/* Chỉ animate opacity bằng transition; transform dùng keyframes khi mở */
 .letter {
   position: absolute;
   top: -20px;
-  width: 80%;
-  height: 80%;
-  border-radius: 15px;
   z-index: 2;
-  transition: transform 1s, opacity 0.3s;
+
+  /* Cố định kích thước để tránh layout shift khi ảnh load */
+  width: min(90vw, 360px);
+  aspect-ratio: 3 / 4;
+
+  border-radius: 15px;
+  overflow: hidden;
+
   opacity: 0;
+  transform: translateY(40%); /* vị trí xuất phát */
+  will-change: transform, opacity;
+
+  /* Chỉ transition những thuộc tính không xung đột với keyframes transform */
+  transition: opacity 0.8s ease;
 }
+
+/* Ảnh bên trong lấp đầy khung lá thư */
 .letter img {
   width: 100%;
-}
-.letter p {
-  text-align: center;
-  font-size: 30px;
-  margin-top: 30px;
-  color: #3b4049;
-}
-
-.wap.opened .letter {
+  height: 100%;
+  object-fit: cover; /* hoặc contain nếu muốn toàn bộ ảnh thấy đủ */
   display: block;
+}
+
+/* Khi mở phong bì: dùng keyframes để đi lên, opacity sẽ mờ dần qua transition */
+.wap.opened .letter {
   opacity: 1;
-  transform: translateY(-100px);
-  transition-delay: 0.3s;
-  transition-duration: 1.5s;
+  animation: letter-up 900ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  /* Không thêm transition transform ở đây để tránh xung đột */
 }
 
-.wap:hover .lid.one {
-  transform: rotateX(90deg);
-  transition-delay: 0s;
+@keyframes letter-up {
+  from {
+    transform: translateY(40%);
+  }
+  to {
+    transform: translateY(0%);
+  }
 }
 
-.wap:hover .lid.two {
-  transform: rotateX(180deg);
-  transition-delay: 0.25s;
+/* (Tuỳ chọn) tắt animation nếu reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .wap.opened .letter {
+    animation: none;
+    transform: translateY(0%);
+    opacity: 1;
+  }
 }
 
+/* ================= Hover open (chỉ trên thiết bị có hover) ================= */
+@media (hover: hover) and (pointer: fine) {
+  .wap:hover .lid.one {
+    transform: rotateX(90deg);
+    transition-delay: 0s;
+  }
+  .wap:hover .lid.two {
+    transform: rotateX(180deg);
+    transition-delay: 0.25s;
+  }
+}
+
+/* ================= Trạng thái opened (khi click/tap) ================= */
 .wap.opened .lid.one {
   transform: rotateX(90deg);
   transition-delay: 0s;
@@ -189,6 +227,7 @@ body {
   transition-delay: 0.25s;
 }
 
+/* ================= Tiện ích khác ================= */
 .main-letter {
   display: none;
   width: 100vw;
@@ -200,6 +239,7 @@ body {
   background-color: #3d69bb;
 }
 
+/* Viền chữ bằng shadow (giả stroke) */
 .text-outline-blue {
   text-shadow: 1px 1px 0 #1e3a8a, -1px 1px 0 #1e3a8a, 1px -1px 0 #1e3a8a,
     -1px -1px 0 #1e3a8a;

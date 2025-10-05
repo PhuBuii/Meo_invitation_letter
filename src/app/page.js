@@ -137,12 +137,9 @@ export default function Page() {
 
         {/* 3) Nút “Xem lại phần mở thư” — chỉ hiển thị khi đã hoàn tất intro */}
         {introDone && (
-          <div className="fixed top-4 right-4 z-50">
+          <div className="fixed top-4 right-4 z-50" onClick={handleResetIntro}>
             <div className="absolute inset-0 size-8/10 left-1/2 top-1/2 -translate-1/2 bg-pink-200 rounded-full transition-all animate-ping"></div>
-            <button
-              onClick={handleResetIntro}
-              className="bg-pink-400 hover:bg-pink-500 text-white text-sm p-2  rounded-full shadow-md transition-all duration-200"
-            >
+            <button className="bg-pink-400 hover:bg-pink-500 text-white text-sm p-2  rounded-full shadow-md transition-all duration-200">
               💌
             </button>
           </div>
