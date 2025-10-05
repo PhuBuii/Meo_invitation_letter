@@ -117,6 +117,7 @@ export default function Letter({
           animate={{
             opacity: isOpened ? 1 : 0,
           }}
+          transition={{ duration: 1 }}
         >
           <img
             src={"/letter.png"}
