@@ -113,7 +113,6 @@ export default function Letter({
 
         <motion.div
           className="letter rounded-lg"
-          initial={{ opacity: 0 }}
           animate={{
             opacity: isOpened ? 1 : 0,
           }}
